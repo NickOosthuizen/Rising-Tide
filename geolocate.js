@@ -22,12 +22,11 @@ function getElevation(latitude,longitude){
 }
 
 function performQuery(street, city, state) {
-    let base = "https://maps.googleapis.com/maps/api/geocode/json?address="
-    let url = base + street + "," + city + "," + state + "&key=" + config.token; 
+    var address ="https://maps.googleapis.com/maps/api/geocode/json?address="+street+","+city+","+state+"&key="+config.token; 
     let lat, lng;
-    $.getJSON(url, function(result) {
-        lat = result["results"][0]["geometry"]["location"]["lat"]; 
-        lng = result["results"][0]["geometry"]["location"]["lng"]; 
+    $.getJSON(address,function(result){
+         lat =result["results"][0]["geometry"]["location"]["lat"]; 
+        lng =result["results"][0]["geometry"]["location"]["lng"]; 
         getElevation(lat,lng);
     });
     
@@ -40,11 +39,9 @@ function addressToGeoCoords() {
     performQuery(street, city, state); 
 }
 
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
 
 function initMap() {
     // Place center of map over US
