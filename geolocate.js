@@ -10,7 +10,6 @@ function getElevation(location){
         const elevator = new google.maps.ElevationService();
         document.writeln("Elevation");
         elevator.getElevationForLocations(
-
             {
                 locations: [location],
             },
@@ -22,7 +21,8 @@ function getElevation(location){
 }
 
 function performQuery(street, city, state) {
-    var address ="https://maps.googleapis.com/maps/api/geocode/json?address="+street+","+city+","+state+"&key="+config.token; 
+    let urlBase = "https://maps.googleapis.com/maps/api/geocode/json?address="
+    var url =urlBase + street + "," + city+ "," + state + "&key=" + config.token; 
     let lat, lng;
     $.getJSON(url, function(result) {
         lat = result["results"][0]["geometry"]["location"]["lat"]; 
@@ -60,17 +60,40 @@ function initMap() {
         infoWindow.close();
         let location = mapsMouseEvent.latLng;
         let latitude = mapsMouseEvent.latLng.lat();
-        let longitude =mapsMouseEvent.latLng.lng();
+        let longitude = mapsMouseEvent.latLng.lng();
+
+        let displayLat = latitude.toPrecision(6);
+        let displayLng = longitude.toPrecision(6);
+
+        displayString = "You've selected a latitude of " + displayLat + " and a longitude of "  + displayLng + ".";
+        promptString = "How likely is it that these coordinates will be affected?"
+
+        let displayElement = document.createElement("p");
+        displayElement.innerHTML = displayString;
+
+        let promptElement = document.createElement("input");
+        promptElement.type = "button";
+        promptElement.value = promptString;
+        promptElement.addEventListener('click', function() {
+            loadResultPage(location);
+        });
+
+        let contentElement = document.createElement("div");
+        contentElement.append(displayElement);
+        contentElement.append(promptElement)
+
         infoWindow = new google.maps.InfoWindow({
             position: mapsMouseEvent.latLng,  
         });
         infoWindow.setContent(
-            JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+             contentElement
         );
         infoWindow.open(map);
-
-        window.location.href="mapResult.html"
-        getElevation(location);
-
     });
+}
+
+
+function loadResultPage(location) {
+    window.location.href="mapResult.html"
+    getElevation(location);
 }
