@@ -6,13 +6,13 @@ function loadAddress() {
     state = document.getElementById("state").value;
 }
 
-function getElevation(latitude,longitude){
+function getElevation(location){
         const elevator = new google.maps.ElevationService();
-        loc = {lat: latitude, lng: longitude};
+        document.writeln("Elevation");
         elevator.getElevationForLocations(
 
             {
-                locations: [loc],
+                locations: [location],
             },
             (results,status) =>{
                 document.writeln(results[0].elevation);
@@ -24,10 +24,9 @@ function getElevation(latitude,longitude){
 function performQuery(street, city, state) {
     var address ="https://maps.googleapis.com/maps/api/geocode/json?address="+street+","+city+","+state+"&key="+config.token; 
     let lat, lng;
-    $.getJSON(address,function(result){
-         lat =result["results"][0]["geometry"]["location"]["lat"]; 
-        lng =result["results"][0]["geometry"]["location"]["lng"]; 
-        getElevation(lat,lng);
+    $.getJSON(url, function(result) {
+        lat = result["results"][0]["geometry"]["location"]["lat"]; 
+        lng = result["results"][0]["geometry"]["location"]["lng"]; 
     });
     
 }
@@ -59,10 +58,9 @@ function initMap() {
     
     map.addListener("click", function(mapsMouseEvent) {
         infoWindow.close();
-        
+        let location = mapsMouseEvent.latLng;
         let latitude = mapsMouseEvent.latLng.lat();
-        let longitude = mapsMouseEvent.latLng.lng();
-
+        let longitude =mapsMouseEvent.latLng.lng();
         infoWindow = new google.maps.InfoWindow({
             position: mapsMouseEvent.latLng,  
         });
@@ -72,5 +70,7 @@ function initMap() {
         infoWindow.open(map);
 
         window.location.href="mapResult.html"
+        getElevation(location);
+
     });
 }
