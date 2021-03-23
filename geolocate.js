@@ -1,39 +1,47 @@
-let street, city, state, map;
+var address, map, infoWindow;
+var markers = [];
+
+
+function clearMarkers() {
+    for (let i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    markers = [];
+}
+
 
 function loadAddress() {
-    street= document.getElementById("street").value;
-    city = document.getElementById("city").value;
-    state = document.getElementById("state").value;
+    address = document.getElementById("street").value;
 }
-
 
 function getElevation(location, func){
-        const elevator = new google.maps.ElevationService();
-        elevator.getElevationForLocations(
-            {
-                locations: [location],
-            },
-            function (results, status) {
-                func(results[0].elevation);
-            }
-        )
+    const elevator = new google.maps.ElevationService();
+    elevator.getElevationForLocations(
+        {
+            locations: [location],
+        },
+        function (results, status) {
+            func(results[0].elevation);
+        }
+    )
 }
+
 
 function createMarker(place) {
-  if (!place.geometry || !place.geometry.location) return;
-  const marker = new google.maps.Marker({
-    map,
-    position: place.geometry.location,
-  });
-  google.maps.event.addListener(marker, "click", () => {
-    infowindow.setContent(place.name || "");
-    infowindow.open(map);
-  });
+    if (!place.geometry || !place.geometry.location) return;
+    const marker = new google.maps.Marker({
+        map,
+        position: place.geometry.location,
+    });
+    markers.push(marker);
+    google.maps.event.addListener(marker, "click", () => {
+        presentPrompt(place.geometry.location, place.name);
+    });
 }
 
 
-function performQuery(street, city, state,map) {
-    let name = street + " " + city + ", " + state; 
+function performQuery(street, map) {
+    let name = street; 
     console.log(name);
     let requests= {
        query: name, 
@@ -41,14 +49,21 @@ function performQuery(street, city, state,map) {
     } 
     let service = new google.maps.places.PlacesService(map);
     service.findPlaceFromQuery(requests, (results, status) => {
-            if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-                for (let i = 0; i < results.length; i++) {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+            clearMarkers();
+            infoWindow.close();
+
+            for (let i = 0; i < results.length; i++) {
                 createMarker(results[i]);
             }
 
             map.setCenter(results[0].geometry.location);
             map.setZoom(8);
-
+            infoWindow = new google.maps.InfoWindow({
+                content: results[0].name,
+                position: results[0].geometry.location,
+            });
+            infoWindow.open(map);
         }
     });
 }
@@ -56,7 +71,7 @@ function performQuery(street, city, state,map) {
 
 function addressToGeoCoords() {
     loadAddress();
-    performQuery(street, city, state,map); 
+    performQuery(address, map); 
 }
 
 
@@ -68,7 +83,7 @@ function initMap() {
         center: US,
         gestureHandling: "greedy",
     });
-    let infoWindow = new google.maps.InfoWindow({
+    infoWindow = new google.maps.InfoWindow({
         content: "Click anywhere on map to get latitude and longitude",
         position: US,
     });
@@ -76,42 +91,55 @@ function initMap() {
 
     
     map.addListener("click", function(mapsMouseEvent) {
-        infoWindow.close();
-        let location = mapsMouseEvent.latLng;
-        let latitude = mapsMouseEvent.latLng.lat();
-        let longitude = mapsMouseEvent.latLng.lng();
-
-        displayLat = latitude.toPrecision(6);
-        displayLng = longitude.toPrecision(6);
-
-        displayString = "You've selected a latitude of " + displayLat + " and a longitude of "  + displayLng + ".";
-        promptString = "How likely is it that these coordinates will be affected?"
-
-        let displayElement = document.createElement("p");
-        displayElement.innerHTML = displayString;
-
-        let promptElement = document.createElement("input");
-        promptElement.type = "button";
-        promptElement.value = promptString;
-        promptElement.addEventListener('click', function() {
-            loadResultPage(location);
-        });
-
-        let contentElement = document.createElement("div");
-        contentElement.append(displayElement);
-        contentElement.append(promptElement)
-
-        map.setCenter(mapsMouseEvent.latLng);
-        map.setZoom(8);
-
-        infoWindow = new google.maps.InfoWindow({
-            position: mapsMouseEvent.latLng,
-        });
-        infoWindow.setContent(
-             contentElement
-        );
-        infoWindow.open(map);
+        clearMarkers();
+        presentPrompt(mapsMouseEvent.latLng, null);
+        
     });
+}
+
+
+function presentPrompt(location, name) {
+    infoWindow.close();
+
+    let latitude = location.lat();
+    let longitude = location.lng();
+
+    displayLat = latitude.toPrecision(6);
+    displayLng = longitude.toPrecision(6);
+
+    if (name === null) {
+        displayString = "You've selected a latitude of " + displayLat + " and a longitude of "  + displayLng + ".";
+    }
+    else {
+        displayString = "You've selected " + name + " at a latitude of " + displayLat + " and a longitude of " + displayLng + ".";
+    }
+
+    promptString = "How likely is it that these coordinates will be affected?"
+
+    let displayElement = document.createElement("p");
+    displayElement.innerHTML = displayString;
+
+    let promptElement = document.createElement("input");
+    promptElement.type = "button";
+    promptElement.value = promptString;
+    promptElement.addEventListener('click', function() {
+        loadResultPage(location);
+    });
+
+    let contentElement = document.createElement("div");
+    contentElement.append(displayElement);
+    contentElement.append(promptElement)
+
+    map.setCenter(location);
+    map.setZoom(8);
+
+    infoWindow = new google.maps.InfoWindow({
+        position: location,
+    });
+    infoWindow.setContent(
+        contentElement
+    );
+    infoWindow.open(map);
 }
 
 
