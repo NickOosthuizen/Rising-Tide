@@ -33,19 +33,22 @@ function createMarker(place) {
 
 
 function performQuery(street, city, state,map) {
-    let name = street + " " + city + ", "+state; 
+    let name = street + " " + city + ", " + state; 
     console.log(name);
     let requests= {
        query: name, 
        fields: ["name","geometry"],
     } 
     let service = new google.maps.places.PlacesService(map);
-    service.findPlaceFromQuery(requests,(results,status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-            for (let i = 0; i < results.length; i++) {
-            createMarker(results[i]);
-        }
-        map.setCenter(results[0].geometry.location);
+    service.findPlaceFromQuery(requests, (results, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                for (let i = 0; i < results.length; i++) {
+                createMarker(results[i]);
+            }
+
+            map.setCenter(results[0].geometry.location);
+            map.setZoom(8);
+
         }
     });
 }
@@ -63,6 +66,7 @@ function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 4,
         center: US,
+        gestureHandling: "greedy",
     });
     let infoWindow = new google.maps.InfoWindow({
         content: "Click anywhere on map to get latitude and longitude",
@@ -97,8 +101,11 @@ function initMap() {
         contentElement.append(displayElement);
         contentElement.append(promptElement)
 
+        map.setCenter(mapsMouseEvent.latLng);
+        map.setZoom(8);
+
         infoWindow = new google.maps.InfoWindow({
-            position: mapsMouseEvent.latLng,  
+            position: mapsMouseEvent.latLng,
         });
         infoWindow.setContent(
              contentElement
