@@ -1,4 +1,4 @@
-let street, city, state;
+var street, city, state;
 
 function loadAddress() {
     address = document.getElementById("street").value;
@@ -6,23 +6,23 @@ function loadAddress() {
     state = document.getElementById("state").value;
 }
 
-function getElevation(location){
+
+function getElevation(location, func){
         const elevator = new google.maps.ElevationService();
-        document.writeln("Elevation");
         elevator.getElevationForLocations(
             {
                 locations: [location],
             },
-            (results,status) =>{
-                document.writeln(results[0].elevation);
+            function (results, status) {
+                func(results[0].elevation);
             }
         )
-
 }
+
 
 function performQuery(street, city, state) {
     let urlBase = "https://maps.googleapis.com/maps/api/geocode/json?address="
-    var url =urlBase + street + "," + city+ "," + state + "&key=" + config.token; 
+    var url = urlBase + street + "," + city+ "," + state + "&key=" + config.token; 
     let lat, lng;
     $.getJSON(url, function(result) {
         lat = result["results"][0]["geometry"]["location"]["lat"]; 
@@ -38,9 +38,6 @@ function addressToGeoCoords() {
     performQuery(street, city, state); 
 }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 function initMap() {
     // Place center of map over US
@@ -62,8 +59,8 @@ function initMap() {
         let latitude = mapsMouseEvent.latLng.lat();
         let longitude = mapsMouseEvent.latLng.lng();
 
-        let displayLat = latitude.toPrecision(6);
-        let displayLng = longitude.toPrecision(6);
+        displayLat = latitude.toPrecision(6);
+        displayLng = longitude.toPrecision(6);
 
         displayString = "You've selected a latitude of " + displayLat + " and a longitude of "  + displayLng + ".";
         promptString = "How likely is it that these coordinates will be affected?"
@@ -94,6 +91,29 @@ function initMap() {
 
 
 function loadResultPage(location) {
-    window.location.href="mapResult.html"
-    getElevation(location);
+    getElevation(location, 
+        function(elevation)
+        {
+            let storage = window.sessionStorage;
+            storage.setItem("latitude", location.lat());
+            storage.setItem("longitude", location.lng());
+            storage.setItem("elevation", elevation);
+            window.location.href = "mapResult.html"
+        }
+    );
+}
+
+
+function fillResultData() {
+    storage = window.sessionStorage;
+    document.getElementById("loc").innerHTML = storage.getItem("latitude") + ", " + storage.getItem("longitude");
+    elev = storage.getItem("elevation");
+    console.log(elev);
+    document.getElementById("elev").innerHTML = elev;
+    if (elev < 5) {
+        document.getElementById("chance").innerHTML = "high";
+    }
+    else {
+        document.getElementById("chance").innerHTML = "low"; 
+    }
 }

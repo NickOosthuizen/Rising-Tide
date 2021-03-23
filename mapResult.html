@@ -4,6 +4,13 @@
     <script src="geolocate.js"></script>
     <script src="key.js"></script>
 </head>
-<body>
+<body onload="fillResultData()">
+
+    <h1>Rising Water Levels</h1>
+    <p>
+        At the coordinates you picked, <span id="loc"></span> at an elevation of
+        <span id="elev"></span>, there is a <span id="chance"></span> chance that rising 
+        sea levels will affect this spot.
+    </p>
     
 </body>
