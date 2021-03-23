@@ -1,7 +1,7 @@
-var street, city, state;
+let street, city, state, map;
 
 function loadAddress() {
-    address = document.getElementById("street").value;
+    street= document.getElementById("street").value;
     city = document.getElementById("city").value;
     state = document.getElementById("state").value;
 }
@@ -19,30 +19,48 @@ function getElevation(location, func){
         )
 }
 
+function createMarker(place) {
+  if (!place.geometry || !place.geometry.location) return;
+  const marker = new google.maps.Marker({
+    map,
+    position: place.geometry.location,
+  });
+  google.maps.event.addListener(marker, "click", () => {
+    infowindow.setContent(place.name || "");
+    infowindow.open(map);
+  });
+}
 
-function performQuery(street, city, state) {
-    let urlBase = "https://maps.googleapis.com/maps/api/geocode/json?address="
-    var url = urlBase + street + "," + city+ "," + state + "&key=" + config.token; 
-    let lat, lng;
-    $.getJSON(url, function(result) {
-        lat = result["results"][0]["geometry"]["location"]["lat"]; 
-        lng = result["results"][0]["geometry"]["location"]["lng"]; 
+
+function performQuery(street, city, state,map) {
+    let name = street + " " + city + ", "+state; 
+    console.log(name);
+    let requests= {
+       query: name, 
+       fields: ["name","geometry"],
+    } 
+    let service = new google.maps.places.PlacesService(map);
+    service.findPlaceFromQuery(requests,(results,status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+            for (let i = 0; i < results.length; i++) {
+            createMarker(results[i]);
+        }
+        map.setCenter(results[0].geometry.location);
+        }
     });
-    
 }
     
 
 function addressToGeoCoords() {
     loadAddress();
-    document.writeln("<h1>Query Result</h1>");
-    performQuery(street, city, state); 
+    performQuery(street, city, state,map); 
 }
 
 
 function initMap() {
     // Place center of map over US
     const US = { lat: 39.6394, lng: -101.2988 }
-    const map = new google.maps.Map(document.getElementById("map"), {
+    map = new google.maps.Map(document.getElementById("map"), {
         zoom: 4,
         center: US,
     });
