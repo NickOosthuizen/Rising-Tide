@@ -13,11 +13,8 @@
     border-bottom: .25rem solid transparent;
 }
 
-#map-container {
-    background-color: teal;
-}
-
 body, html {
     height: 100%;
+    width: 100%
 }
 
