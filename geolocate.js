@@ -28,9 +28,21 @@ function getElevation(location, func){
 
 
 function createMarker(place) {
-    if (!place.geometry || !place.geometry.location) return;
+    if (!place.geometry || !place.geometry.location) {
+        console.log("Invalid Location for marker")
+        return;
+    }
+    const icon = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25),
+    };
     const marker = new google.maps.Marker({
         map,
+        icon,
+        title: place.name,
         position: place.geometry.location,
     });
     markers.push(marker);
@@ -80,9 +92,44 @@ function initMap() {
         gestureHandling: "greedy",
     });
     infoWindow = new google.maps.InfoWindow({
-        content: "Click anywhere on map to get latitude and longitude",
+        content: "Click anywhere on the map to get a location or use the search bar at the top",
         position: US,
     });
+
+    const input = document.getElementById("search-input");
+    const searchBox = new google.maps.places.SearchBox(input);
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+
+    map.addListener("bounds_changed", function() {
+        searchBox.setBounds(map.getBounds());
+    });
+
+    searchBox.addListener("places_changed", function() {
+        const places = searchBox.getPlaces();
+
+        if (places.length == 0) {
+            return;
+        }
+
+        clearMarkers();
+
+        const bouunds = new google.maps.LatLngBounds();
+        places.forEach(function(place) {
+            if (!place.geometry || !place.geometry.location) {
+                console.log("Invalid location returned");
+                return;
+            }
+            createMarker(place);
+            if (place.geometry.viewport) {
+                bouunds.union(place.geometry.viewport);
+            }
+            else {
+                bouunds.extend(place.geometry.location);
+            }
+        });
+        map.fitBounds(bounds);
+    });
+
     infoWindow.open(map);
 
     map.addListener("click", function(mapsMouseEvent) {
