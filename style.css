@@ -1,12 +1,23 @@
 #map {
+    height: fill;
+    width: fill;
+}
+
+.main-container {
+    max-width: 70em;
+}
+
+.nav-menu .nav-link {
+    background-color: transparent;
+    padding: .25rem;
+    border-bottom: .25rem solid transparent;
+}
+
+#map-container {
+    background-color: teal;
+}
+
+body, html {
     height: 100%;
 }
 
-html, body {
-    height: 100%;
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 2%;
-    margin-bottom: 2%;
-    background-color: #9fe7fc;
-}

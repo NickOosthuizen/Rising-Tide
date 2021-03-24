@@ -116,9 +116,11 @@ function presentPrompt(location, name) {
 
     let displayElement = document.createElement("p");
     displayElement.innerHTML = displayString;
+    displayElement.className = "text-center position-relative"
 
     let promptElement = document.createElement("input");
     promptElement.type = "button";
+    promptElement.className = "btn btn-primary position-relative";
     promptElement.value = promptString;
     promptElement.addEventListener('click', function() {
         loadResultPage(location);
