@@ -51,7 +51,6 @@ function performQuery(street, map) {
     service.findPlaceFromQuery(requests, (results, status) => {
         if (status === google.maps.places.PlacesServiceStatus.OK && results) {
             clearMarkers();
-            infoWindow.close();
 
             for (let i = 0; i < results.length; i++) {
                 createMarker(results[i]);
@@ -59,11 +58,8 @@ function performQuery(street, map) {
 
             map.setCenter(results[0].geometry.location);
             map.setZoom(8);
-            infoWindow = new google.maps.InfoWindow({
-                content: results[0].name,
-                position: results[0].geometry.location,
-            });
-            infoWindow.open(map);
+            
+            presentPrompt(results[0].geometry.location, results[0].name);
         }
     });
 }
@@ -71,7 +67,7 @@ function performQuery(street, map) {
 
 function addressToGeoCoords() {
     loadAddress();
-    performQuery(address, map); 
+    performQuery(address, map);
 }
 
 
@@ -116,22 +112,30 @@ function presentPrompt(location, name) {
 
     let displayElement = document.createElement("p");
     displayElement.innerHTML = displayString;
-    displayElement.className = "text-center position-relative"
+    displayElement.className = "text-center"
 
     let promptElement = document.createElement("input");
     promptElement.type = "button";
-    promptElement.className = "btn btn-primary position-relative";
+    promptElement.className = "btn btn-primary";
     promptElement.value = promptString;
     promptElement.addEventListener('click', function() {
         loadResultPage(location);
     });
 
     let contentElement = document.createElement("div");
+    contentElement.className = "justify-content-center"
     contentElement.append(displayElement);
     contentElement.append(promptElement)
 
     map.setCenter(location);
-    map.setZoom(8);
+
+    let zoom = map.getZoom();
+    console.log(zoom);
+
+    if (zoom < 8) {
+        console.log("Changing zoom")
+        map.setZoom(8);
+    }
 
     infoWindow = new google.maps.InfoWindow({
         position: location,
