@@ -89,11 +89,9 @@ function initMap() {
     });
     infoWindow.open(map);
 
-    
     map.addListener("click", function(mapsMouseEvent) {
         clearMarkers();
         presentPrompt(mapsMouseEvent.latLng, null);
-        
     });
 }
 
@@ -161,7 +159,6 @@ function fillResultData() {
     storage = window.sessionStorage;
     document.getElementById("loc").innerHTML = storage.getItem("latitude") + ", " + storage.getItem("longitude");
     elev = storage.getItem("elevation");
-    console.log(elev);
     document.getElementById("elev").innerHTML = elev;
     if (elev < 5) {
         document.getElementById("chance").innerHTML = "high";
