@@ -50,6 +50,57 @@ function createMarker(place) {
         presentPrompt(place.geometry.location, place.name);
     });
 }
+function drawWater(level){
+    var canvas = document.getElementById("water");
+    var ctx = canvas.getContext("2d");
+    var pos =0;
+    var width = 50;
+    var pos2 =width*4;
+
+    var y = level*50;
+    id = setInterval(waves,level*15);
+    var deepblue="#0f6afc"; 
+    var blue="#479dff"; 
+    var space="#FFFFFF"; 
+    function waves(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        threeWaves(ctx,pos2,y-10,width,space,deepblue);
+
+        threeWaves(ctx,pos,y,width,deepblue,blue);
+        ctx.fillStyle = blue;
+        pos++;
+        pos2-=.7;
+        if(pos2 <= 0)
+            pos2 = width*4 ;
+        if(pos == width*4)
+            pos=0;
+    }
+    
+}
+
+function threeWaves(ctx,pos,y,width,space,color){
+        ctx.fillStyle = color;
+
+        ctx.fillRect(0,y,1000,100);
+        singleWave(ctx,pos-width*4,y,width,space ,color );
+        singleWave(ctx,pos,y,width,space ,color );
+        singleWave(ctx,pos+width*4,y,width,space,color  );
+
+}
+
+function singleWave(ctx,start,posH,width,space,color){
+    ctx.fillStyle = color;
+
+    ctx.beginPath();
+    ctx.ellipse(start, posH+1, width-1, 15, 0, 0, Math.PI,true);
+    ctx.fill();
+    ctx.fillStyle = space;
+    ctx.beginPath();
+    ctx.ellipse(start+width*2, posH, width, 10, 0, 0, Math.PI,false);
+    ctx.fill();
+
+
+}
 
 
 function performQuery(street, map) {
@@ -215,8 +266,10 @@ function fillResultData() {
     document.getElementById("elev").innerHTML = elev;
     if (elev < 5) {
         document.getElementById("chance").innerHTML = "high";
+        drawWater(1);
     }
     else {
         document.getElementById("chance").innerHTML = "low"; 
+        drawWater(2);
     }
 }
