@@ -273,14 +273,45 @@ function loadResultPage(location) {
 function fillResultData() {
     storage = window.sessionStorage;
     document.getElementById("loc").innerHTML = Math.round(storage.getItem("latitude")*100)/100 + ", " + Math.round(storage.getItem("longitude")*100)/100;
-    elev = Math.round(storage.getItem("elevation"));
+    elev = Math.round(storage.getItem("elevation")*10)/10;
     document.getElementById("elev").innerHTML = elev;
-    if (elev < 5) {
-        document.getElementById("chance").innerHTML = "high";
+    if(elev <.5){
+        document.getElementById("chance").innerHTML = "Extremely High ";
+        document.getElementById("message").innerHTML= "If carbon dioxide emissions stay constant your house will be flooded by 2050 and even earlier if emissions increase."
+        drawWater(.5);
+ 
+    }
+    else if(elev <1){
+        document.getElementById("chance").innerHTML = "High";
+        document.getElementById("message").innerHTML= "If emissions stay the same your house will be flooded by 2100 and if emissions increase it will be flooded by 2050.";
+        drawWater(.7);
+ 
+    }
+    else if(elev <1.5){
+        document.getElementById("chance").innerHTML = "Medium High";
+        document.getElementById("message").innerHTML= "If emissions stay constant your house will not flood by 2100 but if they increase it will flood by 2100.";
+        drawWater(.9);
+ 
+    }
+    else if (elev < 2) {
+        document.getElementById("chance").innerHTML = "Meduim";
+        document.getElementById("message").innerHTML= "If emissions don't increase moderately your house will not be flooded by 2100. ";
         drawWater(1);
     }
-    else {
-        document.getElementById("chance").innerHTML = "low"; 
+    else if (elev < 2.5) {
+        document.getElementById("chance").innerHTML = "Meduim Low";
+        document.getElementById("message").innerHTML= "If emissions don't increase drastically your house is safe until at least 2100.";
+        drawWater(1.5);
+    }
+    else if (elev < 10) {
+        document.getElementById("chance").innerHTML = "low";
+        document.getElementById("message").innerHTML= "Your house is unlikely to flood by 2100 but in the worst case scenario could still flood in the future.";
         drawWater(2);
+    }
+    else {
+        document.getElementById("chance").innerHTML = "very low"; 
+        document.getElementById("message").innerHTML= "Your house is not predicted to flood but this is still a dire issue that will cost billions in damage.";
+
+        drawWater(2.2);
     }
 }
