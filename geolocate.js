@@ -57,8 +57,9 @@ function drawWater(level){
     var width = 50;
     var pos2 =width*4;
 
-    var y = level*50;
-    id = setInterval(waves,level*15);
+    var y = canvas.height;
+   var id = setInterval(rise,level*15);
+   setInterval(waves,level*15);
     var deepblue="#0f6afc"; 
     var blue="#479dff"; 
     var space="#FFFFFF"; 
@@ -75,6 +76,16 @@ function drawWater(level){
         if(pos == width*4)
             pos=0;
     }
+ 
+    function rise(){
+        waves();
+        y--;
+        if(y < level*50){
+            clearInterval(id);
+            console.log(id);
+        }   
+    }
+
     
 }
 
