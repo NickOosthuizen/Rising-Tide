@@ -207,8 +207,8 @@ function presentPrompt(location, name) {
     let latitude = location.lat();
     let longitude = location.lng();
 
-    displayLat = latitude.toPrecision(6);
-    displayLng = longitude.toPrecision(6);
+    displayLat = Math.round(latitude.toPrecision(6)*100)/100;
+    displayLng = Math.round(longitude.toPrecision(6)*100)/100;
 
     if (name === null) {
         displayString = "You've selected a latitude of " + displayLat + " and a longitude of "  + displayLng + ".";
@@ -272,8 +272,8 @@ function loadResultPage(location) {
 
 function fillResultData() {
     storage = window.sessionStorage;
-    document.getElementById("loc").innerHTML = storage.getItem("latitude") + ", " + storage.getItem("longitude");
-    elev = storage.getItem("elevation");
+    document.getElementById("loc").innerHTML = Math.round(storage.getItem("latitude")*100)/100 + ", " + Math.round(storage.getItem("longitude")*100)/100;
+    elev = Math.round(storage.getItem("elevation"));
     document.getElementById("elev").innerHTML = elev;
     if (elev < 5) {
         document.getElementById("chance").innerHTML = "high";
