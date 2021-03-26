@@ -50,6 +50,68 @@ function createMarker(place) {
         presentPrompt(place.geometry.location, place.name);
     });
 }
+function drawWater(level){
+    var canvas = document.getElementById("water");
+    var ctx = canvas.getContext("2d");
+    var pos =0;
+    var width = 50;
+    var pos2 =width*4;
+
+    var y = canvas.height;
+   var id = setInterval(rise,level*15);
+   setInterval(waves,level*15);
+    var deepblue="#0f6afc"; 
+    var blue="#479dff"; 
+    var space="#FFFFFF"; 
+    function waves(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        threeWaves(ctx,pos2,y-10,width,space,deepblue);
+
+        threeWaves(ctx,pos,y,width,deepblue,blue);
+        ctx.fillStyle = blue;
+        pos++;
+        pos2-=.7;
+        if(pos2 <= 0)
+            pos2 = width*4 ;
+        if(pos == width*4)
+            pos=0;
+    }
+ 
+    function rise(){
+        waves();
+        y--;
+        if(y < level*50){
+            clearInterval(id);
+            console.log(id);
+        }   
+    }
+
+    
+}
+
+function threeWaves(ctx,pos,y,width,space,color){
+        ctx.fillStyle = color;
+
+        ctx.fillRect(0,y,1000,100);
+        singleWave(ctx,pos-width*4,y,width,space ,color );
+        singleWave(ctx,pos,y,width,space ,color );
+        singleWave(ctx,pos+width*4,y,width,space,color  );
+
+}
+
+function singleWave(ctx,start,posH,width,space,color){
+    ctx.fillStyle = color;
+
+    ctx.beginPath();
+    ctx.ellipse(start, posH+1, width-1, 15, 0, 0, Math.PI,true);
+    ctx.fill();
+    ctx.fillStyle = space;
+    ctx.beginPath();
+    ctx.ellipse(start+width*2, posH, width, 10, 0, 0, Math.PI,false);
+    ctx.fill();
+
+
+}
 
 
 function performQuery(street, map) {
@@ -145,8 +207,8 @@ function presentPrompt(location, name) {
     let latitude = location.lat();
     let longitude = location.lng();
 
-    displayLat = latitude.toPrecision(6);
-    displayLng = longitude.toPrecision(6);
+    displayLat = Math.round(latitude.toPrecision(6)*100)/100;
+    displayLng = Math.round(longitude.toPrecision(6)*100)/100;
 
     if (name === null) {
         displayString = "You've selected a latitude of " + displayLat + " and a longitude of "  + displayLng + ".";
@@ -212,14 +274,47 @@ function loadResultPage(location) {
 
 function fillResultData() {
     storage = window.sessionStorage;
-    document.getElementById("loc").innerHTML = storage.getItem("latitude") + ", " + storage.getItem("longitude");
-    elev = storage.getItem("elevation");
+    document.getElementById("loc").innerHTML = Math.round(storage.getItem("latitude")*100)/100 + ", " + Math.round(storage.getItem("longitude")*100)/100;
+    elev = Math.round(storage.getItem("elevation")*10)/10;
     document.getElementById("elev").innerHTML = elev;
-    if (elev < 5) {
-        document.getElementById("chance").innerHTML = "high";
+    if(elev <.5){
+        document.getElementById("chance").innerHTML = "Extremely High ";
+        document.getElementById("message").innerHTML= "If carbon dioxide emissions stay constant your house will be flooded by 2050 and even earlier if emissions increase."
+        drawWater(.5);
+ 
+    }
+    else if(elev <1){
+        document.getElementById("chance").innerHTML = "High";
+        document.getElementById("message").innerHTML= "If emissions stay the same your house will be flooded by 2100 and if emissions increase it will be flooded by 2050.";
+        drawWater(.7);
+ 
+    }
+    else if(elev <1.5){
+        document.getElementById("chance").innerHTML = "Medium High";
+        document.getElementById("message").innerHTML= "If emissions stay constant your house will not flood by 2100 but if they increase it will flood by 2100.";
+        drawWater(.9);
+ 
+    }
+    else if (elev < 2) {
+        document.getElementById("chance").innerHTML = "Meduim";
+        document.getElementById("message").innerHTML= "If emissions don't increase moderately your house will not be flooded by 2100. ";
+        drawWater(1);
+    }
+    else if (elev < 2.5) {
+        document.getElementById("chance").innerHTML = "Meduim Low";
+        document.getElementById("message").innerHTML= "If emissions don't increase drastically your house is safe until at least 2100.";
+        drawWater(1.5);
+    }
+    else if (elev < 10) {
+        document.getElementById("chance").innerHTML = "low";
+        document.getElementById("message").innerHTML= "Your house is unlikely to flood by 2100 but in the worst case scenario could still flood in the future.";
+        drawWater(2);
     }
     else {
-        document.getElementById("chance").innerHTML = "low"; 
+        document.getElementById("chance").innerHTML = "very low"; 
+        document.getElementById("message").innerHTML= "Your house is not predicted to flood but this is still a dire issue that will cost billions in damage.";
+
+        drawWater(2.2);
     }
 }
 
