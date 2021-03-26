@@ -177,7 +177,6 @@ function presentPrompt(location, name) {
     map.setCenter(location);
 
     let zoom = map.getZoom();
-    console.log(zoom);
 
     if (zoom < 8) {
         console.log("Changing zoom")
@@ -195,6 +194,9 @@ function presentPrompt(location, name) {
 
 
 function loadResultPage(location) {
+    let dist = getDistanceToSea(location);
+    sessionStorage.setItem("distance", dist);
+    console.log(dist);
     getElevation(location, 
         function(elevation)
         {
@@ -220,3 +222,64 @@ function fillResultData() {
         document.getElementById("chance").innerHTML = "low"; 
     }
 }
+
+
+function getDistanceToSea(location) {
+    
+}
+
+/*
+// breadth first search type function to find distance to sea
+function getElevationandDisteToSea(location, func)
+{
+    var searchDist = .5;
+    const elevator = new google.maps.ElevationService();
+
+    var searchPoints = [];
+    var oceanPoints = [];
+    
+    while (oceanPoints.length < 1) {
+        searchPoints = pointsDistAway(location, searchDist, 45);
+        elevator.getElevationForLocations(
+            {
+                locations: searchPoints,
+            },
+            function (results, status) {
+                for (i = 0; i < 8; i++)
+                {
+                    console.log(results[i].elevation);
+                    if (results[i].elevation < 0)
+                    {
+                        oceanPoints.push(results[i].location);
+                    }
+                }
+            });
+        searchDist *= 2;
+    }
+
+    let dist = searchDist * 69;
+    elevator.getElevationForLocations(
+        {
+            locations: [location],
+        },
+        function (results, status) {
+            func(results[0].elevation, dist);
+        }
+    )
+}
+*/
+
+/*
+function pointsDistAway(location, distance, theta) {
+    var point, pointLat, pointLng;
+    var pointArray = [];
+    for (angle = 0; angle < 360; angle += theta)
+    {
+        pointLat = location.lat() + distance * Math.sin(angle * Math.pi / 180);
+        pointLng = location.lng() + distance * Math.cos(angle * Math.pi / 180);
+        point = new google.maps.LatLng(pointLat, pointLng);
+        pointArray.push(point);
+    }
+    return pointArray;
+}
+*/
