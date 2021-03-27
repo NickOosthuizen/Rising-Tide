@@ -50,6 +50,7 @@ function createMarker(place) {
         presentPrompt(place.geometry.location, place.name);
     });
 }
+
 function drawWater(level){
     var canvas = document.getElementById("water");
     var ctx = canvas.getContext("2d");
@@ -65,9 +66,9 @@ function drawWater(level){
     var space="#FFFFFF"; 
     function waves(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        threeWaves(ctx,pos2,y-10,width,space,deepblue);
+        threeWaves(ctx,pos2,y-10,width,space,deepblue,canvas.height);
 
-        threeWaves(ctx,pos,y,width,deepblue,blue);
+        threeWaves(ctx,pos,y,width,deepblue,blue,canvas.height);
         ctx.fillStyle = blue;
         pos++;
         pos2-=.7;
@@ -89,10 +90,10 @@ function drawWater(level){
     
 }
 
-function threeWaves(ctx,pos,y,width,space,color){
+function threeWaves(ctx,pos,y,width,space,color,height){
         ctx.fillStyle = color;
 
-        ctx.fillRect(0,y,1000,100);
+        ctx.fillRect(0,y,2000,height);
         singleWave(ctx,pos-width*4,y,width,space ,color );
         singleWave(ctx,pos,y,width,space ,color );
         singleWave(ctx,pos+width*4,y,width,space,color  );
