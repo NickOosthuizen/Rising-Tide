@@ -267,27 +267,28 @@ function loadResultPage(location) {
 
 function fillResultData() {
     let chance = document.getElementById("chance").innerHTML;
-    if (chance === "Extremely High") {
+    console.log(chance);
+    if (chance === "extremely high") {
         document.getElementById("message").innerHTML= "If carbon dioxide emissions stay constant your house will be flooded by 2050 and even earlier if emissions increase."
         drawWater(.5);
     }
-    else if (chance === "High") {
+    else if (chance === "high") {
         document.getElementById("message").innerHTML= "If emissions stay the same your house will be flooded by 2100 and if emissions increase it will be flooded by 2050.";
         drawWater(.7);
     }
-    else if(chance === "Medium High") {
+    else if(chance === "medium high") {
         document.getElementById("message").innerHTML= "If emissions stay constant your house will not flood by 2100 but if they increase it will flood by 2100.";
         drawWater(.9);
     }
-    else if (chance === "Medium") {
+    else if (chance === "medium") {
         document.getElementById("message").innerHTML= "If emissions don't increase moderately your house will not be flooded by 2100. ";
         drawWater(1);
     }
-    else if (chance === "Medium Low") {
+    else if (chance === "medium low") {
         document.getElementById("message").innerHTML= "If emissions don't increase drastically your house is safe until at least 2100.";
         drawWater(1.5);
     }
-    else if (chance === "Low") {
+    else if (chance === "low") {
         document.getElementById("message").innerHTML= "Your house is unlikely to flood by 2100 but in the worst case scenario could still flood in the future.";
         drawWater(2);
     }
