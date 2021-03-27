@@ -16,22 +16,20 @@
     </head>
 
     <body class="containter" {% block loadFunc %}{% endblock %}>
-        <div class="main-container d-flex 2-100 p-3 mx-auto flex-column">
+        <div class="main-container d-flex w-100 p-3 mx-auto flex-column">
             <header class="mb-auto">
                 <div>
                     <h3 class="float-md-start mb-0">Rising Tide</h3>
                     <nav class="nav nav-menu justify-content-center float-md-end">
                         <a class="nav-link" href="{% url 'Rising_Tide_App:home' %}">Home</a>
-                        <a class="nav-link">Resources</a>
+                        <a class="nav-link" href="{% url 'Rising_Tide_App:resources' %}">Resources</a>
                     </nav>
                 </div>
             </header>
         </div>
 
-        <div class="main-container mx-auto w-100 h-100 pb-5 row">
         {% block contents %}
         {% endblock %}
-        </div>
 
     </body>
     

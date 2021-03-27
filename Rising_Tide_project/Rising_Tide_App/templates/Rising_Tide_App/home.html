@@ -4,21 +4,23 @@
 Rising Tide
 {% endblock %}
 
-
 {% block loadFunc %}
 {% endblock %}
 
 {% block contents %}
-<input
-    id="search-input"
-    class="controls"
-    type="text"
-    placeholder="Search Location"
-/>
+<div class="main-container mx-auto w-100 h-100 pb-5 row">
+    <input
+        id="search-input"
+        class="controls"
+        type="text"
+        placeholder="Search Location"
+    />
 
-<div class="col-12" id="map"></div>
-<script
-    src="https://maps.googleapis.com/maps/api/js?key=APIKEY&callback=initMap&libraries=places&v=weekly"
-    async
-></script>
+    <div class="col-12" id="map"></div>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=APIKEY&callback=initMap&libraries=places&v=weekly"
+        async
+    ></script>
+</div>
+
 {% endblock %}
