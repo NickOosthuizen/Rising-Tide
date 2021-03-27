@@ -1,0 +1,16 @@
+{% extends "base.html" %} 
+
+{% contents %}
+<div class="align-self-center">
+    <h2 class="text-center">
+        Rising Sea Levels
+    </h2>
+    <p class="text-center">
+        At the coordinates you picked, {{ longitude }}, {{ latitude}} at an elevation of
+        {{ elevation }}, there is a {{ chance }} chance that rising 
+        sea levels will affect this spot.<br>
+        <span id="message"></span>
+    </p>
+    <canvas id="water"></canvas>
+</div>
+{% endblock %}

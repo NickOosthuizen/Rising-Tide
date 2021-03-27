@@ -1,0 +1,24 @@
+#map {
+    height: fill;
+    width: fill;
+}
+
+.main-container {
+    max-width: 70em;
+}
+
+.nav-menu .nav-link {
+    background-color: transparent;
+    padding: .25rem;
+    border-bottom: .25rem solid transparent;
+}
+
+body, html {
+    height: 100%;
+    width: 100%
+}
+
+canvas{
+    width: 100%;
+    height: 40%;
+}

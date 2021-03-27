@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block contents %}
+<input
+    id="search-input"
+    class="controls"
+    type="text"
+    placeholder="Search Location"
+/>
+
+<div class="col-12" id="map"></div>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=APIKEY&callback=initMap&libraries=places&v=weekly"
+    async
+></script>
+{% endblock %}
