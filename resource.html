@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Rising Tide</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
+        <script src="geolocate.js"></script>
+        <script src="key.js"></script>
+
+    </head>
+    <body class="container">
+        <div class="main-container d-flex w-100 p-3 mx-auto flex-column">
+            <header class="mb-auto">
+                <div>
+                    <h3 class="float-md-start mb-0">Rising Tide</h3>
+                    <nav class="nav nav-menu justify-content-center float-md-end">
+                        <a class="nav-link" href="home.html">Home</a>
+                        <a class="nav-link" href="resource.html">Resources</a>
+                    </nav>
+                </div>
+            </header>
+        </div>
+        <div>
+                Want to prevent Sea Levels rising? Here are some resources that explain how you can.
+                <ul>
+                        <li><a href="https://www.climate.gov/news-features/understanding-climate/climate-change-global-sea-level">NOAA</a></li>
+                        <li><a href="https://climate.nasa.gov/vital-signs/sea-level/">Nasa Ocean Level Rise Reporting</a></li>
+                        <li><a href="https://lao.ca.gov/Publications/Report/4121">Ca Helping At Risk Communities </a></li>
+
+
+                </ul>
+            <canvas id="water"></canvas>
+        <script>
+                drawWater(1);
+        </script>
+
+
+        </div>
+      
+    </body>
+</html>
