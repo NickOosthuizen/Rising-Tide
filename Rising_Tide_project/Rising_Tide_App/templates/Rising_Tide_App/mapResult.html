@@ -1,12 +1,20 @@
-{% extends "base.html" %} 
+{% extends "Rising_Tide_App/base.html" %} 
 
-{% contents %}
+{% block title %}
+Result
+{% endblock %}
+
+{% block loadFunc %}
+onload="fillResultData()"
+{% endblock %}
+
+{% block contents %}
 <div class="align-self-center">
     <h2 class="text-center">
         Rising Sea Levels
     </h2>
     <p class="text-center">
-        At the coordinates you picked, {{ longitude }}, {{ latitude}} at an elevation of
+        At the coordinates you picked, {{ longitude }}, {{ latitude }} at an elevation of
         {{ elevation }}, there is a {{ chance }} chance that rising 
         sea levels will affect this spot.<br>
         <span id="message"></span>

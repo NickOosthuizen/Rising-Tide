@@ -23,7 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('risingtide/', include('Rising_Tide_App.urls')),
     path('', RedirectView.as_view(url = 'risingtide/', permanent = True)),
-]
-
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

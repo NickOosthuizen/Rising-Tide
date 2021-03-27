@@ -256,125 +256,43 @@ function presentPrompt(location, name) {
 
 
 function loadResultPage(location) {
-    let dist = getDistanceToSea(location);
-    sessionStorage.setItem("distance", dist);
-    console.log(dist);
     getElevation(location, 
         function(elevation)
         {
-            let storage = window.sessionStorage;
-            storage.setItem("latitude", location.lat());
-            storage.setItem("longitude", location.lng());
-            storage.setItem("elevation", elevation);
-            window.location.href = "mapResult.html"
+            window.location.href = 'risingtide/result?lng=' + location.lng() + '&lat=' + location.lat() + '&elev=' + elevation 
         }
     );
 }
 
 
 function fillResultData() {
-    storage = window.sessionStorage;
-    document.getElementById("loc").innerHTML = Math.round(storage.getItem("latitude")*100)/100 + ", " + Math.round(storage.getItem("longitude")*100)/100;
-    elev = Math.round(storage.getItem("elevation")*10)/10;
-    document.getElementById("elev").innerHTML = elev;
-    if(elev <.5){
-        document.getElementById("chance").innerHTML = "Extremely High ";
+    let chance = document.getElementById("chance").innerHTML;
+    if (chance === "Extremely High") {
         document.getElementById("message").innerHTML= "If carbon dioxide emissions stay constant your house will be flooded by 2050 and even earlier if emissions increase."
         drawWater(.5);
- 
     }
-    else if(elev <1){
-        document.getElementById("chance").innerHTML = "High";
+    else if (chance === "High") {
         document.getElementById("message").innerHTML= "If emissions stay the same your house will be flooded by 2100 and if emissions increase it will be flooded by 2050.";
         drawWater(.7);
- 
     }
-    else if(elev <1.5){
-        document.getElementById("chance").innerHTML = "Medium High";
+    else if(chance === "Medium High") {
         document.getElementById("message").innerHTML= "If emissions stay constant your house will not flood by 2100 but if they increase it will flood by 2100.";
         drawWater(.9);
- 
     }
-    else if (elev < 2) {
-        document.getElementById("chance").innerHTML = "Meduim";
+    else if (chance === "Medium") {
         document.getElementById("message").innerHTML= "If emissions don't increase moderately your house will not be flooded by 2100. ";
         drawWater(1);
     }
-    else if (elev < 2.5) {
-        document.getElementById("chance").innerHTML = "Meduim Low";
+    else if (chance === "Medium Low") {
         document.getElementById("message").innerHTML= "If emissions don't increase drastically your house is safe until at least 2100.";
         drawWater(1.5);
     }
-    else if (elev < 10) {
-        document.getElementById("chance").innerHTML = "low";
+    else if (chance === "Low") {
         document.getElementById("message").innerHTML= "Your house is unlikely to flood by 2100 but in the worst case scenario could still flood in the future.";
         drawWater(2);
     }
-    else {
-        document.getElementById("chance").innerHTML = "very low"; 
+    else { 
         document.getElementById("message").innerHTML= "Your house is not predicted to flood but this is still a dire issue that will cost billions in damage.";
-
         drawWater(2.2);
     }
 }
-
-
-function getDistanceToSea(location) {
-    
-}
-
-/*
-// breadth first search type function to find distance to sea
-function getElevationandDisteToSea(location, func)
-{
-    var searchDist = .5;
-    const elevator = new google.maps.ElevationService();
-
-    var searchPoints = [];
-    var oceanPoints = [];
-    
-    while (oceanPoints.length < 1) {
-        searchPoints = pointsDistAway(location, searchDist, 45);
-        elevator.getElevationForLocations(
-            {
-                locations: searchPoints,
-            },
-            function (results, status) {
-                for (i = 0; i < 8; i++)
-                {
-                    console.log(results[i].elevation);
-                    if (results[i].elevation < 0)
-                    {
-                        oceanPoints.push(results[i].location);
-                    }
-                }
-            });
-        searchDist *= 2;
-    }
-
-    let dist = searchDist * 69;
-    elevator.getElevationForLocations(
-        {
-            locations: [location],
-        },
-        function (results, status) {
-            func(results[0].elevation, dist);
-        }
-    )
-}
-*/
-
-/*
-function pointsDistAway(location, distance, theta) {
-    var point, pointLat, pointLng;
-    var pointArray = [];
-    for (angle = 0; angle < 360; angle += theta)
-    {
-        pointLat = location.lat() + distance * Math.sin(angle * Math.pi / 180);
-        pointLng = location.lng() + distance * Math.cos(angle * Math.pi / 180);
-        point = new google.maps.LatLng(pointLat, pointLng);
-        pointArray.push(point);
-    }
-    return pointArray;
-}
-*/
