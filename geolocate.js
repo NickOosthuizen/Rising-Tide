@@ -290,11 +290,11 @@ function fillResultData() {
         drawWater(.9);
     }
     else if (chance === "medium") {
-        document.getElementById("message").innerHTML= "If emissions don't increase moderately this won't be flooded by 2100. ";
+        document.getElementById("message").innerHTML= "If emissions don't increase moderately this location probably won't be flooded by 2100. ";
         drawWater(1);
     }
     else if (chance === "medium low") {
-        document.getElementById("message").innerHTML= "If emissions don't increase drastically this location is safe until at least 2100.";
+        document.getElementById("message").innerHTML= "If emissions don't increase drastically this location is probably safe until at least 2100.";
         drawWater(1.5);
     }
     else if (chance === "low") {
@@ -302,7 +302,7 @@ function fillResultData() {
         drawWater(2);
     }
     else { 
-        document.getElementById("message").innerHTML= "This location is not unlikely to flood due to rising sea levels.";
+        document.getElementById("message").innerHTML= "This location is unlikely to flood due to rising sea levels.";
         drawWater(2.2);
     }
 }
