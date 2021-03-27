@@ -292,18 +292,18 @@ function fillResultData() {
     }
     else if(elev <1.5){
         document.getElementById("chance").innerHTML = "Medium High";
-        document.getElementById("message").innerHTML= "If emissions stay constant your house will not flood by 2100 but if they increase it will flood by 2100.";
+        document.getElementById("message").innerHTML= "If emissions stay constant your house will not flood by 2100 but if emmisions increase it will flood by 2100.";
         drawWater(.9);
  
     }
     else if (elev < 2) {
         document.getElementById("chance").innerHTML = "Meduim";
-        document.getElementById("message").innerHTML= "If emissions don't increase moderately your house will not be flooded by 2100. ";
+        document.getElementById("message").innerHTML= "If emissions don't increase your house will not be flooded by 2100. ";
         drawWater(1);
     }
     else if (elev < 2.5) {
         document.getElementById("chance").innerHTML = "Meduim Low";
-        document.getElementById("message").innerHTML= "If emissions don't increase drastically your house is safe until at least 2100.";
+        document.getElementById("message").innerHTML= "If emissions don't increase dramatically your house is safe until at least 2100.";
         drawWater(1.5);
     }
     else if (elev < 10) {
@@ -313,7 +313,7 @@ function fillResultData() {
     }
     else {
         document.getElementById("chance").innerHTML = "very low"; 
-        document.getElementById("message").innerHTML= "Your house is not predicted to flood but this is still a dire issue that will cost billions in damage.";
+        document.getElementById("message").innerHTML= "Your house is not predicted to flood, but this is still a dire issue that will cost billions in property damage and leave millions without a home.";
 
         drawWater(2.2);
     }
