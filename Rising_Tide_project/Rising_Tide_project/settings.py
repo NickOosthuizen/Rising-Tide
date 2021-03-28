@@ -75,6 +75,7 @@ WSGI_APPLICATION = 'Rising_Tide_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# use a local mysql database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

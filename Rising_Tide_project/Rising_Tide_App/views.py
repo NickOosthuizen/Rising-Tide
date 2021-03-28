@@ -7,8 +7,9 @@ import math
 def home(request):
     return render(request, 'Rising_Tide_App/home.html')
 
-
+# fill and render the map result page
 def mapResult(request):
+    # a longitude, latitude, and elevation value are expected
     try:
         lng = float(request.GET['lng'])
         lat = float(request.GET['lat'])
@@ -16,10 +17,11 @@ def mapResult(request):
     except (NameError, TypeError):
         raise Http404("Invalid query parameters were passed")
 
-    # the database only contains entries with numbers with odd tenth place decimals
-    odd_rounded_lng = math.floor((lng - .1) / .2 + .5) * .2 + .1
+    # the database only contains latitudes and longitudes ending with a decimal value of .1, .3, .5, .7, or .9
+    # Thus round the lat and lng values to the nearest of these decimal points
+    odd_rounded_lng = math.floor(5 * lng) * .2 + .1
     odd_rounded_lng = round(odd_rounded_lng, 1)
-    odd_rounded_lat = math.floor((lat - .1) / .2 + .5) * .2 + .1
+    odd_rounded_lat = math.floor(5 * lat) * .2 + .1
     odd_rounded_lat = round(odd_rounded_lat, 1)
 
     try:
@@ -31,6 +33,7 @@ def mapResult(request):
 
     chances = ["very low", "low", "medium low", "medium", "medium high", "high", "extremely high"]
 
+    # base chances on either being far enough from sea or elevation
     if (entry.distance > 100):
         chance = chances[0]
     elif (elevation < .5):
