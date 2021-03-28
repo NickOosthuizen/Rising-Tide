@@ -9,11 +9,11 @@ function clearMarkers() {
     markers = [];
 }
 
-
-function loadAddress() {
-    address = document.getElementById("street").value;
-}
-
+/*
+ * Get the elevation at the coordinates of a latlng object using
+ * the google maps elevation service. func is a callback function that
+ * does what you want to do with the elevation once returned
+ */
 function getElevation(location, func){
     const elevator = new google.maps.ElevationService();
     elevator.getElevationForLocations(
@@ -27,6 +27,12 @@ function getElevation(location, func){
 }
 
 
+/*
+ * Place a marker at a latlng object on the map
+ * The map is also recentered on this new marker
+ * If the marker is clicked, present the prompt to take to the 
+ * results page
+ */
 function createMarker(place) {
     if (!place.geometry || !place.geometry.location) {
         console.log("Invalid Location for marker")
@@ -116,39 +122,14 @@ function singleWave(ctx,start,posH,width,space,color){
 
 
 }
-
-
-function performQuery(street, map) {
-    let name = street; 
-    console.log(name);
-    let requests= {
-       query: name, 
-       fields: ["name","geometry"],
-    } 
-    let service = new google.maps.places.PlacesService(map);
-    service.findPlaceFromQuery(requests, (results, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-            clearMarkers();
-
-            for (let i = 0; i < results.length; i++) {
-                createMarker(results[i]);
-            }
-
-            map.setCenter(results[0].geometry.location);
-            map.setZoom(8);
-            
-            presentPrompt(results[0].geometry.location, results[0].name);
-        }
-    });
-}
     
-
-function addressToGeoCoords() {
-    loadAddress();
-    performQuery(address, map);
-}
-
-
+/*
+ * Initialize the map
+ * Creates a new google maps Map object centered on the US
+ * Also places a search box object at the top of the map
+ * If a places_changed event occurs from a search, place a marker 
+ * at the location. If the map is clicked, present the prompt to check that location
+ */
 function initMap() {
     // Place center of map over US
     const US = { lat: 39.6394, lng: -101.2988 }
@@ -205,6 +186,9 @@ function initMap() {
 }
 
 
+/*
+ * Create an info window prompting the user to check the sea level results for a location
+ */
 function presentPrompt(location, name) {
     infoWindow.close();
 
@@ -214,6 +198,7 @@ function presentPrompt(location, name) {
     displayLat = Math.round(latitude.toPrecision(6)*100)/100;
     displayLng = Math.round(longitude.toPrecision(6)*100)/100;
 
+    // If the location was searched, include the location name as well. Othewise only include the coordinates
     if (name === null) {
         displayString = "You've selected a latitude of " + displayLat + " and a longitude of "  + displayLng + ".";
     }
@@ -231,10 +216,12 @@ function presentPrompt(location, name) {
     promptElement.type = "button";
     promptElement.className = "btn btn-primary";
     promptElement.value = promptString;
+
     promptElement.addEventListener('click', function() {
         loadResultPage(location);
     });
 
+    // combine the button and the text elements into one for display
     let contentElement = document.createElement("div");
     contentElement.className = "justify-content-center"
     contentElement.append(displayElement);
@@ -242,9 +229,11 @@ function presentPrompt(location, name) {
 
     reCenterMap(location);
 
+    // place the info window
     infoWindow = new google.maps.InfoWindow({
         position: location,
     });
+
     infoWindow.setContent(
         contentElement
     );
@@ -264,6 +253,9 @@ function reCenterMap(location) {
 }
 
 
+/* 
+ * The result string is strucutured to meet the format expected by the django view function
+ */
 function loadResultPage(location) {
     getElevation(location, 
         function(elevation)
@@ -273,7 +265,9 @@ function loadResultPage(location) {
     );
 }
 
-
+/*
+ * Based on the chance filled by Django, display a different message and different speed for the water animation
+ */
 function fillResultData() {
     let chance = document.getElementById("chance").innerHTML;
     console.log(chance);
