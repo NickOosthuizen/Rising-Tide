@@ -9,16 +9,20 @@ onload="fillResultData()"
 {% endblock %}
 
 {% block contents %}
-<div class="align-self-center">
-    <h2 class="text-center">
-        Rising Sea Levels
-    </h2>
-    <p class="text-center">
-        At the coordinates you picked, {{ longitude }}, {{ latitude }} at an elevation of
-        {{ elevation }}, there is a <span id="chance">{{ chance }}</span> chance that rising 
-        sea levels will affect this spot.<br>
-        <span id="message"></span>
-    </p>
-    <canvas id="water"></canvas>
+<div class="main-container mx-auto w-100 h-100 row">
+    <div class="align-self-center">
+        <h2 class="text-center">
+            Rising Sea Levels
+        </h2>
+        <p class="text-center">
+            At the coordinates you picked, at a longitude of {{ longitude }}, a latitude of {{ latitude }}, and an elevation of
+            {{ elevation }}, there is a <span id="chance">{{ chance }}</span> chance that rising 
+            sea levels will affect this spot. <span id="message"></span><br>
+            The threat of rising sea levels is expected to affect hundreds of millions of people by the year 2100.
+            If you want to learn more, check out our <a href="{% url 'Rising_Tide_App:resources' %}">resources page</a> with a few links about this topic.
+        </p>
+        <canvas id="water"></canvas>
+    </div>
 </div>
+
 {% endblock %}

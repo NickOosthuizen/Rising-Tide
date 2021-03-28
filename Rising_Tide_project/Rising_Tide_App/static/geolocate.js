@@ -46,10 +46,14 @@ function createMarker(place) {
         position: place.geometry.location,
     });
     markers.push(marker);
+
+    reCenterMap(place.geometry.location);
+
     google.maps.event.addListener(marker, "click", () => {
         presentPrompt(place.geometry.location, place.name);
     });
 }
+
 function drawWater(level){
     var canvas = document.getElementById("water");
     var ctx = canvas.getContext("2d");
@@ -58,16 +62,16 @@ function drawWater(level){
     var pos2 =width*4;
 
     var y = canvas.height;
-   var id = setInterval(rise,level*15);
-   setInterval(waves,level*15);
+    var id = setInterval(rise,level*15);
+    setInterval(waves,level*15);
     var deepblue="#0f6afc"; 
     var blue="#479dff"; 
     var space="#FFFFFF"; 
     function waves(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        threeWaves(ctx,pos2,y-10,width,space,deepblue);
+        threeWaves(ctx,pos2,y-10,width,space,deepblue,canvas.height);
 
-        threeWaves(ctx,pos,y,width,deepblue,blue);
+        threeWaves(ctx,pos,y,width,deepblue,blue,canvas.height);
         ctx.fillStyle = blue;
         pos++;
         pos2-=.7;
@@ -89,10 +93,10 @@ function drawWater(level){
     
 }
 
-function threeWaves(ctx,pos,y,width,space,color){
+function threeWaves(ctx,pos,y,width,space,color,height){
         ctx.fillStyle = color;
 
-        ctx.fillRect(0,y,1000,100);
+        ctx.fillRect(0,y,1000,height);
         singleWave(ctx,pos-width*4,y,width,space ,color );
         singleWave(ctx,pos,y,width,space ,color );
         singleWave(ctx,pos+width*4,y,width,space,color  );
@@ -175,7 +179,7 @@ function initMap() {
 
         clearMarkers();
 
-        const bouunds = new google.maps.LatLngBounds();
+        const bounds = new google.maps.LatLngBounds();
         places.forEach(function(place) {
             if (!place.geometry || !place.geometry.location) {
                 console.log("Invalid location returned");
@@ -183,10 +187,10 @@ function initMap() {
             }
             createMarker(place);
             if (place.geometry.viewport) {
-                bouunds.union(place.geometry.viewport);
+                bounds.union(place.geometry.viewport);
             }
             else {
-                bouunds.extend(place.geometry.location);
+                bounds.extend(place.geometry.location);
             }
         });
         map.fitBounds(bounds);
@@ -236,14 +240,7 @@ function presentPrompt(location, name) {
     contentElement.append(displayElement);
     contentElement.append(promptElement)
 
-    map.setCenter(location);
-
-    let zoom = map.getZoom();
-
-    if (zoom < 8) {
-        console.log("Changing zoom")
-        map.setZoom(8);
-    }
+    reCenterMap(location);
 
     infoWindow = new google.maps.InfoWindow({
         position: location,
@@ -252,6 +249,18 @@ function presentPrompt(location, name) {
         contentElement
     );
     infoWindow.open(map);
+}
+
+
+function reCenterMap(location) {
+    map.setCenter(location);
+
+    let zoom = map.getZoom();
+
+    if (zoom < 8) {
+        console.log("Changing zoom")
+        map.setZoom(8);
+    }
 }
 
 
@@ -269,31 +278,31 @@ function fillResultData() {
     let chance = document.getElementById("chance").innerHTML;
     console.log(chance);
     if (chance === "extremely high") {
-        document.getElementById("message").innerHTML= "If carbon dioxide emissions stay constant your house will be flooded by 2050 and even earlier if emissions increase."
+        document.getElementById("message").innerHTML= "If carbon dioxide emissions stay constant this location could be flooded by 2050 or even earlier."
         drawWater(.5);
     }
     else if (chance === "high") {
-        document.getElementById("message").innerHTML= "If emissions stay the same your house will be flooded by 2100 and if emissions increase it will be flooded by 2050.";
+        document.getElementById("message").innerHTML= "If emissions stay this location could be flooded by 2100 and if emissions increase it could be flooded by 2050.";
         drawWater(.7);
     }
     else if(chance === "medium high") {
-        document.getElementById("message").innerHTML= "If emissions stay constant your house will not flood by 2100 but if they increase it will flood by 2100.";
+        document.getElementById("message").innerHTML= "If emissions stay constant this location probably won't flood by 2100 but if they increase flooding becomes a possibility.";
         drawWater(.9);
     }
     else if (chance === "medium") {
-        document.getElementById("message").innerHTML= "If emissions don't increase moderately your house will not be flooded by 2100. ";
+        document.getElementById("message").innerHTML= "If emissions don't increase moderately this location probably won't be flooded by 2100. ";
         drawWater(1);
     }
     else if (chance === "medium low") {
-        document.getElementById("message").innerHTML= "If emissions don't increase drastically your house is safe until at least 2100.";
+        document.getElementById("message").innerHTML= "If emissions don't increase drastically this location is probably safe until at least 2100.";
         drawWater(1.5);
     }
     else if (chance === "low") {
-        document.getElementById("message").innerHTML= "Your house is unlikely to flood by 2100 but in the worst case scenario could still flood in the future.";
+        document.getElementById("message").innerHTML= "This location is unlikely to flood by 2100 but in a worst case scenario could still flood in the future.";
         drawWater(2);
     }
     else { 
-        document.getElementById("message").innerHTML= "Your house is not predicted to flood but this is still a dire issue that will cost billions in damage.";
+        document.getElementById("message").innerHTML= "This location is unlikely to flood due to rising sea levels.";
         drawWater(2.2);
     }
 }

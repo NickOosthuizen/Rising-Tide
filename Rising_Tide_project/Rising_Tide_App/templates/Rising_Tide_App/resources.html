@@ -1,0 +1,30 @@
+{% extends "Rising_Tide_App/base.html" %}
+
+{% block title %}
+Resources
+{% endblock%}
+
+{% block loadFunc %}
+{% endblock %}
+
+{% block contents %}
+
+
+<div class="main-container mx-auto w-100 h-100 row " >
+    <div class="align-self-center" >
+        <p class="text-center">
+            <h4>We're just computer science students so we're not the greatest sources on rising sea levels, but want to learn more? Here are some resources that can it explain it much better than we can.</h4>
+            <ul>
+                <li><a href="https://www.climate.gov/news-features/understanding-climate/climate-change-global-sea-level">NOAA</a>- A detailed article on why oceans are rising and how much they are rising by. </li>
+                <li><a href="https://climate.nasa.gov/vital-signs/sea-level/">Nasa Ocean Level Rise Reporting</a>- exact mesurments on ocean level.</li>
+                <li><a href="https://lao.ca.gov/Publications/Report/4121">Ca Helping At Risk Communities </a>- Californian state legislative proposal on how to support those affected by rising sea levels.</li>
+            </ul>
+        </p>
+        <canvas id="water"></canvas>
+    </div>
+    <script>
+        drawWater(1);
+    </script>
+</div>
+
+{% endblock %}

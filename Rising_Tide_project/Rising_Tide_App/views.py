@@ -61,3 +61,5 @@ def mapResult(request):
     return render(request, 'Rising_Tide_App/mapResult.html', context)
     
 
+def resources(request):
+    return render(request, 'Rising_Tide_App/resources.html')
