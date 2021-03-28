@@ -276,7 +276,7 @@ function fillResultData() {
         drawWater(.5);
     }
     else if (chance === "high") {
-        document.getElementById("message").innerHTML= "If emissions stay this location could be flooded by 2100 and if emissions increase it could be flooded by 2050.";
+        document.getElementById("message").innerHTML= "If emissions stay constant this location could be flooded by 2100 and if emissions increase it could be flooded by 2050.";
         drawWater(.7);
     }
     else if(chance === "medium high") {
